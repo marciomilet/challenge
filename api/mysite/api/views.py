@@ -7,20 +7,30 @@ from .serializers import UserSerializer, CampaignSerializer
 from .models import User, Campaign
 from django.shortcuts import get_object_or_404
 from mysite.tasks import create_campaigns, create_campaigns_users
+from django.db import transaction
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser])
 def upload(request):
-    users = csv_to_dict(request.data['users'])
-    print(users)
+    file = request.data.get('users')
+    
+    if not file:
+        return Response({"error": "No file provided."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        users = csv_to_dict(file)
+    except ValueError as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
     serializer = UserSerializer(data=users, many=True)
+
     if serializer.is_valid():
         serializer.save()
         create_campaigns_users.delay()
-        create_campaigns.delay(users)
+        create_campaigns.delay()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def campaigns(request):
