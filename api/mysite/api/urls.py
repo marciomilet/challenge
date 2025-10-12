@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import UserListCreate, CampaignListCreate, CampaignUserListCreate, upload
+from .views import  upload, campaigns, campaign, users
 
 urlpatterns = [
-    path('users/', UserListCreate.as_view(), name='user-list-create'),
-    path('campaigns/', CampaignListCreate.as_view(), name='campaign-list-create'),
-    path('campaign-users/', CampaignUserListCreate.as_view(), name='campaignuser-list-create'),
     path('upload/', upload, name='upload'),
+    path('campaigns/', campaigns, name='campaigns'),
+    path('campaigns/<int:id>', campaign, name='campaign'),
+    path('users/', users, name='users'),
 ]
