@@ -2,3 +2,5 @@ django
 django-rest-framework
 environs
 pandas
+redis
+celery
