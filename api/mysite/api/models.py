@@ -11,9 +11,9 @@ class User(models.Model):
 class Campaign(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    user_count = models.IntegerField()
+    user_count = models.IntegerField(blank=True)
     date = models.DateField(auto_now_add=True)
-    average_income = models.FloatField()
+    average_income = models.FloatField(blank=True)
 
 class CampaignUser(models.Model):
     id = models.AutoField(primary_key=True)
