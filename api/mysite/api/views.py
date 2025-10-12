@@ -1,13 +1,12 @@
-from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,parser_classes
 from .services.csv_dict import csv_to_dict
-from .serializers import UserSerializer, CampaignSerializer, CampaignUserSerializer
-from .models import User, Campaign, CampaignUser
+from .serializers import UserSerializer, CampaignSerializer
+from .models import User, Campaign
 from django.shortcuts import get_object_or_404
-from ..mysite.tasks import create_campaigns, create_campaigns_users
+from mysite.tasks import create_campaigns, create_campaigns_users
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser])
