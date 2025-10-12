@@ -7,6 +7,7 @@ from .services.csv_dict import csv_to_dict
 from .serializers import UserSerializer, CampaignSerializer, CampaignUserSerializer
 from .models import User, Campaign, CampaignUser
 from django.shortcuts import get_object_or_404
+from ..mysite.tasks import create_campaigns, create_campaigns_users
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser])
@@ -16,8 +17,8 @@ def upload(request):
     serializer = UserSerializer(data=users, many=True)
     if serializer.is_valid():
         serializer.save()
-        
-        #JOB TO UPDATE CAMPAIGNS AND CAMPAIGNUSERS
+        create_campaigns_users.delay()
+        create_campaigns.delay(users)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
