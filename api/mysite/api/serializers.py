@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CampaignSerializer(serializers.ModelSerializer):
     class Meta:
         model = Campaign
-        fields = ['id', 'type', 'date']
+        fields = ['id', 'name','user_count', 'date', 'average_income']
 
 class CampaignUserSerializer(serializers.ModelSerializer):
     class Meta:
