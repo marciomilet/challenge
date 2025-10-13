@@ -26,7 +26,6 @@ def upload(request):
     if serializer.is_valid():
         serializer.save()
         create_campaigns_users.delay()
-        # create_campaigns.delay()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
