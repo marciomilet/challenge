@@ -6,7 +6,8 @@ from .services.csv_dict import csv_to_dict
 from .serializers import UserSerializer, CampaignSerializer
 from .models import User, Campaign
 from django.shortcuts import get_object_or_404
-from mysite.tasks import create_campaigns_users
+from mysite.tasks import create_campaigns_users, update_campaign_incomes, create_campaigns
+from celery import chain
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser])
@@ -25,7 +26,11 @@ def upload(request):
 
     if serializer.is_valid():
         serializer.save()
-        create_campaigns_users.delay()
+        chain(
+            create_campaigns.si(),
+            create_campaigns_users.si(),
+            update_campaign_incomes.si()
+        ).apply_async()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
