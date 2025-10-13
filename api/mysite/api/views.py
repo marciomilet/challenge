@@ -6,13 +6,12 @@ from .services.csv_dict import csv_to_dict
 from .serializers import UserSerializer, CampaignSerializer
 from .models import User, Campaign
 from django.shortcuts import get_object_or_404
-from mysite.tasks import create_campaigns, create_campaigns_users
-from django.db import transaction
+from mysite.tasks import create_campaigns_users
 
 @api_view(['POST'])
 @parser_classes([MultiPartParser])
 def upload(request):
-    file = request.data.get('users')
+    file = request.data.get('file')
     
     if not file:
         return Response({"error": "No file provided."}, status=status.HTTP_400_BAD_REQUEST)
@@ -27,7 +26,7 @@ def upload(request):
     if serializer.is_valid():
         serializer.save()
         create_campaigns_users.delay()
-        create_campaigns.delay()
+        # create_campaigns.delay()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -55,4 +54,4 @@ def campaign(request, id=None):
 def users(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
