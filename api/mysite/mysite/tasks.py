@@ -2,7 +2,17 @@ from celery import shared_task
 from api.models import User, Campaign, CampaignUser
 
 @shared_task
+def create_campaigns():
+    campaigns = Campaign.objects.all()
+    if campaigns.count() == 0:
+        Campaign(name="Starter").save()
+        Campaign(name="Growth").save()
+        Campaign(name="Premium").save()
+
+@shared_task
 def create_campaigns_users():
+    
+    create_campaigns()
 
     users = User.objects.all()
     for user in users:
@@ -25,6 +35,3 @@ def create_campaigns_users():
                     campaign_id = 3
                 ).save()
 
-# @shared_task
-# def create_campaigns():
-#     campaigns = Campaign.objects.all()

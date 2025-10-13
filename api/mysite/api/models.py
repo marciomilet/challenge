@@ -6,7 +6,7 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     age = models.IntegerField()
     income = models.FloatField()
-    city = models.CharField(max_length=100)    
+    city = models.CharField(max_length=100)
     
 class Campaign(models.Model):
     id = models.AutoField(primary_key=True)
