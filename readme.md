@@ -24,7 +24,7 @@ to start the server
 ## Windows
 
 if you are on windows the recommended way to run redis is on a docker container, make sure docker engine is running
-and on the root folder run 
+and on the root folder run
 `docker run -d -p 6379:6379 redis`
 to run the docker container configured on docker-compose.yml
 now on a new terminal run
