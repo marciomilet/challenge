@@ -3,21 +3,28 @@
 ## Requirements
 
  [Python](https://www.python.org)
+
  [Django](https://duckduckgo.com)
+
  [Redis](https://redis.io)
+
  [Docker](https://www.docker.com) (if you are on windows)
   
-## Instalation
+## Installation
 
 Firstly clone this repository into any folder you like,
+using
+`git clone https://github.com/marciomilet/challenge.git`
 open a terminal on the root folder of the project ( the one that contains requirements.txt)
-and
-` run pip install requirements.txt `
+and run
+`pip install -r requirements.txt`
 this should install all depedencies required for the project
+
 
 ## Running the API
 
-after installation on a terminal on api\mysite run
+after installation, on a terminal go to `cd api\mysite` run
+`py manage.py migrate` to initialize the database then run
 `py manage.py runserver`
 to start the server
 
